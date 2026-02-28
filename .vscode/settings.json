@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": [
+        "src"
+    ],
+    "java.project.referencedLibraries": [
+        "lib\\servlet-api.jar",
+        "c:\\Users\\Tejas\\exam_portal\\lib\\mysql-connector-j-9.6.0.jar"
+    ]
+}
