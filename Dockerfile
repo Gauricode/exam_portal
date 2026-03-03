@@ -15,8 +15,8 @@ ENV PORT=8080
 
 RUN rm -rf /usr/local/tomcat/webapps/*
 COPY --from=build /app/target/untitled-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
-
-RUN sed -i 's/port="8080"/port="${PORT}"/g' /usr/local/tomcat/conf/server.xml
+COPY render-start.sh /usr/local/bin/render-start.sh
+RUN chmod +x /usr/local/bin/render-start.sh
 
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+CMD ["/usr/local/bin/render-start.sh"]

@@ -5,12 +5,9 @@
         response.sendRedirect("login.jsp");
         return;
     }
-    java.util.List<model.Result> results = (java.util.List<model.Result>) session.getAttribute("results");
-    if (results == null) {
-        dao.ResultDAO dao = new dao.ResultDAO();
-        results = dao.getResultsByStudentId(student.getStudentId());
-        session.setAttribute("results", results);
-    }
+    dao.ResultDAO dao = new dao.ResultDAO();
+    java.util.List<model.Result> results = dao.getResultsByStudentId(student.getStudentId());
+    session.setAttribute("results", results);
 
     java.util.Map<Integer, String> examNameMap = new java.util.HashMap<Integer, String>();
     java.util.List<model.Exam> allExams = new dao.ExamDAO().getAllExams();
@@ -65,6 +62,7 @@
                if ("Flagged".equals(r.getStatus())) { rowClass = "table-danger"; }
                else if ("Timed Out".equals(r.getStatus())) { rowClass = "table-warning"; }
                double percent = r.getTotalQuestions() == 0 ? 0 : (r.getScore() * 100.0) / r.getTotalQuestions();
+             String displayDate = r.getResultDate() == null ? "-" : r.getResultDate().replace("T", " ");
                String statusBadge = "badge bg-success";
                if ("Flagged".equals(r.getStatus())) { statusBadge = "badge bg-danger"; }
                else if ("Timed Out".equals(r.getStatus())) { statusBadge = "badge bg-warning text-dark"; }
@@ -74,7 +72,7 @@
                 <td><%= r.getScore() %></td>
                 <td><%= r.getTotalQuestions() %></td>
                 <td><%= String.format("%.2f", percent) %>%</td>
-                <td><%= r.getResultDate() %></td>
+                <td><%= displayDate %></td>
                 <td><span class="<%= statusBadge %>"><%= r.getStatus() %></span></td>
                 <td><%= r.getSuspiciousCount() %></td>
             </tr>

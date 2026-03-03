@@ -17,7 +17,7 @@ This document outlines the steps required to set up the environment and run the 
 4. **MySQL Server**
    - Install MySQL Server 8.0+.
    - During installation note the root password.
-   - (Optional) create a user `hero` with password `mysql1845@` or adjust DBConnection configuration.
+   - Create an application user and use environment variables for credentials.
 5. **Apache Tomcat**
    - Download Tomcat 9 (or 10 if using Jakarta namespace) from the Apache archive.
    - Extract to a directory such as `C:\Program Files\Apache Software Foundation\Tomcat 9.0`.
@@ -46,9 +46,12 @@ This document outlines the steps required to set up the environment and run the 
 
 ## Configure Application
 
-1. Open `src/main/java/dao/DBConnection.java` and ensure the JDBC URL, user, and password match your MySQL setup.
-   - Default user is `hero`, password `mysql1845@`.
-   - You can also set environment variables `DB_URL`, `DB_USER`, and `DB_PASS` to override.
+1. Copy `.env.example` to `.env` and set your real DB values.
+2. Configure these environment variables:
+   - `DB_URL` (or `DB_HOST`)
+   - `DB_USER`
+   - `DB_PASS` (or `DB_PASSWORD`)
+3. Never commit `.env` to git.
 
 ## Build and Deploy
 

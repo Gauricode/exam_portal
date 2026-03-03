@@ -15,8 +15,9 @@ git push
 1. Open Render dashboard.
 2. New + -> Web Service.
 3. Connect your GitHub repo.
-4. Render auto-detects `render.yaml` and `Dockerfile`.
-5. Confirm service settings and create.
+4. Select branch `gauri`.
+5. Render auto-detects `render.yaml` and `Dockerfile`.
+6. Confirm service settings and create.
 
 ## 3) Set environment variables (required)
 
@@ -44,4 +45,5 @@ After deploy, open:
 ## Notes
 
 - App is deployed as `ROOT.war`, so no `/exam` prefix is needed on Render.
+- Container startup script binds Tomcat to Render's runtime `PORT` automatically.
 - Any new commit triggers auto-deploy when `autoDeploy` is enabled.

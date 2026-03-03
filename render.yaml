@@ -1,6 +1,7 @@
 services:
   - type: web
     name: online-exam-app
+    branch: gauri
     runtime: docker
     plan: free
     autoDeploy: true
