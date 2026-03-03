@@ -49,7 +49,7 @@ public class ViolationDAO {
             Connection con = DBConnection.getConnection();
             if (con == null) return violations;
 
-            String sql = "SELECT * FROM violations";
+            String sql = "SELECT * FROM violations ORDER BY violationDate DESC";
             try (PreparedStatement ps = con.prepareStatement(sql);
                  ResultSet rs = ps.executeQuery()) {
 

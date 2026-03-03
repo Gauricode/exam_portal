@@ -27,14 +27,22 @@ This document outlines the steps required to set up the environment and run the 
 
 1. Open a command prompt or PowerShell and navigate to the project root.
 2. Run the SQL script to create the database and insert sample data:
+
+   > **Note:** the schema now includes a `suspiciousCount` column on `results` and a `violations` table. Exams with 3 or more suspicious events are marked as **Flagged**, and an entry is inserted into `violations` for admin review.
    ```powershell
    "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p"<your-root-password>" < database_schema.sql
    ```
-3. Check that the `online_exam` database and tables exist:
+3. Check that the `online_exam` database and tables exist and include the new `suspiciousCount` field in `results`:
    ```sql
    USE online_exam;
    SHOW TABLES;
+   DESCRIBE results;
    ```
+   
+   > **Existing installations:** if you already created the `results` table earlier, run:
+   > ```sql
+   > ALTER TABLE results ADD COLUMN suspiciousCount INT DEFAULT 0;
+   > ```
 
 ## Configure Application
 
@@ -72,7 +80,7 @@ This document outlines the steps required to set up the environment and run the 
 ## App Structure and Notes
 
 - `src/main/java/controller` contains servlets mapped via `@WebServlet`.
-- JSP pages are under `src/main/webapp` including `student pages` (note space) and `admin` directory.
+- JSP pages are under `src/main/webapp` including `student` (formerly "student pages") and `admin` directory.
 - Database connections use HikariCP with configuration in `DBConnection.java`.
 - Tomcat 9 uses `javax.servlet` API; code imports have been adjusted accordingly.
 
@@ -81,6 +89,14 @@ This document outlines the steps required to set up the environment and run the 
 - After Tomcat starts, use a browser to navigate to the app.
 - Student login: submit credentials on the main page.
 - Admin login: go to `http://localhost:8080/exam/admin/adminLogin.jsp` and use admin credentials.
+
+### One-click local startup
+
+- You can also run the provided script from project root:
+   ```powershell
+   .\run_local.bat
+   ```
+- This script compiles the project and starts it at `http://localhost:8080/exam/`.
 
 ## Troubleshooting
 

@@ -7,7 +7,7 @@
     <display-name>OnlineExam</display-name>
 
     <welcome-file-list>
-        <welcome-file>student pages/login.jsp</welcome-file>
+        <welcome-file>student/login.jsp</welcome-file>
     </welcome-file-list>
 
 </web-app>

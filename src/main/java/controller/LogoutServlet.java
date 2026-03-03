@@ -16,7 +16,7 @@ public class LogoutServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         session.invalidate();
-        res.sendRedirect("student pages/login.jsp");
+        res.sendRedirect("student/login.jsp");
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
@@ -24,6 +24,6 @@ public class LogoutServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         session.invalidate();
-        res.sendRedirect("student pages/login.jsp");
+        res.sendRedirect("student/login.jsp");
     }
 }

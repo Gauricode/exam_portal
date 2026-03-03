@@ -13,7 +13,7 @@ public class ResultDAO {
             Connection con = DBConnection.getConnection();
             if (con == null) return results;
 
-            String sql = "SELECT * FROM results WHERE studentId=?";
+            String sql = "SELECT * FROM results WHERE studentId=? ORDER BY resultDate DESC";
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, studentId);
 
@@ -28,6 +28,7 @@ public class ResultDAO {
                                 rs.getString("resultDate"),
                                 rs.getString("status")
                         );
+                        r.setSuspiciousCount(rs.getInt("suspiciousCount"));
                         results.add(r);
                     }
                 }
@@ -50,7 +51,7 @@ public class ResultDAO {
             Connection con = DBConnection.getConnection();
             if (con == null) return results;
 
-            String sql = "SELECT * FROM results";
+            String sql = "SELECT * FROM results ORDER BY resultDate DESC";
             try (PreparedStatement ps = con.prepareStatement(sql);
                  ResultSet rs = ps.executeQuery()) {
 
@@ -64,6 +65,7 @@ public class ResultDAO {
                             rs.getString("resultDate"),
                             rs.getString("status")
                     );
+                    r.setSuspiciousCount(rs.getInt("suspiciousCount"));
                     results.add(r);
                 }
             }
@@ -83,7 +85,7 @@ public class ResultDAO {
             Connection con = DBConnection.getConnection();
             if (con == null) return false;
 
-            String sql = "INSERT INTO results (studentId, examId, score, totalQuestions, resultDate, status) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO results (studentId, examId, score, totalQuestions, resultDate, status, suspiciousCount) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, result.getStudentId());
                 ps.setInt(2, result.getExamId());
@@ -91,6 +93,7 @@ public class ResultDAO {
                 ps.setInt(4, result.getTotalQuestions());
                 ps.setString(5, result.getResultDate());
                 ps.setString(6, result.getStatus());
+                ps.setInt(7, result.getSuspiciousCount());
 
                 int res = ps.executeUpdate();
                 con.close();

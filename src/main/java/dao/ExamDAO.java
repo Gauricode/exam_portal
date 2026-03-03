@@ -96,4 +96,29 @@ public class ExamDAO {
 
         return false;
     }
+
+    public boolean existsByName(String name) {
+        try {
+            Connection con = DBConnection.getConnection();
+            if (con == null) return false;
+
+            String sql = "SELECT COUNT(1) FROM exams WHERE examName = ?";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, name);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        int cnt = rs.getInt(1);
+                        con.close();
+                        return cnt > 0;
+                    }
+                }
+            }
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

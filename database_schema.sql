@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS results (
     totalQuestions INT NOT NULL,
     resultDate DATETIME NOT NULL,
     status VARCHAR(50) NOT NULL,
+    suspiciousCount INT DEFAULT 0,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (studentId) REFERENCES students(studentId) ON DELETE CASCADE,
     FOREIGN KEY (examId) REFERENCES exams(examId) ON DELETE CASCADE
@@ -96,3 +97,7 @@ INSERT INTO questions (examId, questionText, optionA, optionB, optionC, optionD,
 (1, 'What is the size of an int in Java?', '4 bytes', '2 bytes', '8 bytes', '1 byte', 'A'),
 (1, 'Which keyword is used for inheritance?', 'extends', 'inherits', 'extends from', 'inherit', 'A'),
 (1, 'What is the correct way to create an object?', 'ClassName obj = new ClassName();', 'new ClassName obj;', 'ClassName obj new;', 'obj = new ClassName;', 'A');
+
+-- sample violation (demonstration)
+INSERT INTO violations (studentId, examId, violationType, description, violationDate) VALUES
+(1, 1, 'Proctoring', 'Sample log entry for testing', NOW());

@@ -8,28 +8,28 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import dao.ResultDAO;
-import model.Result;
-import model.Student;
+import dao.ViolationDAO;
+import model.Violation;
+import model.Admin;
 
-@WebServlet("/ResultServlet")
-public class ResultServlet extends HttpServlet {
+@WebServlet("/ViewViolationsServlet")
+public class ViewViolationsServlet extends HttpServlet {
 
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
         HttpSession session = req.getSession();
-        Student student = (Student) session.getAttribute("student");
-
-        if (student == null) {
-            res.sendRedirect("student/login.jsp");
+        Admin admin = (Admin) session.getAttribute("admin");
+        if (admin == null) {
+            res.sendRedirect("admin/adminLogin.jsp");
             return;
         }
 
-        ResultDAO dao = new ResultDAO();
-        List<Result> results = dao.getResultsByStudentId(student.getStudentId());
+        ViolationDAO dao = new ViolationDAO();
+        List<Violation> violations = dao.getAllViolations();
 
-        session.setAttribute("results", results);
-        res.sendRedirect("student/result.jsp");
+        session.setAttribute("violations", violations);
+        res.sendRedirect("admin/viewViolations.jsp");
     }
 }

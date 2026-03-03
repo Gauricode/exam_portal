@@ -22,7 +22,7 @@ public class RegisterServlet extends HttpServlet {
         boolean success = dao.registerStudent(name, email, password);
 
         if (success) {
-            res.sendRedirect("student pages/login.jsp");
+            res.sendRedirect("student/login.jsp");
         } else {
             res.getWriter().println("Registration failed. Please try again.");
         }

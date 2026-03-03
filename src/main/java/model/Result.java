@@ -8,6 +8,7 @@ public class Result {
     private int totalQuestions;
     private String resultDate;
     private String status;
+    private int suspiciousCount;
 
     public Result() {}
 
@@ -19,9 +20,13 @@ public class Result {
         this.totalQuestions = totalQuestions;
         this.resultDate = resultDate;
         this.status = status;
+        this.suspiciousCount = 0;
     }
 
     public int getResultId() { return resultId; }
+
+    public int getSuspiciousCount() { return suspiciousCount; }
+    public void setSuspiciousCount(int suspiciousCount) { this.suspiciousCount = suspiciousCount; }
     public void setResultId(int resultId) { this.resultId = resultId; }
 
     public int getStudentId() { return studentId; }

@@ -12,8 +12,9 @@ MySQL database and accessed via DAOs using HikariCP connection pooling.
 - Student registration and login
 - Admin authentication and dashboard
 - Create exams and add multiple-choice questions
-- Students can take exams and view results
-- Admin can view students, results, and add new questions
+- Students can take exams and view results (includes basic proctoring – tracks tab/window switches, right-clicks, developer tools, fullscreen exit)
+- Suspicious activity is counted and if a threshold is exceeded the result is flagged and a violation record is created; admins can review proctoring violations
+- Admin can view students, results (shows suspicious counts), and add new questions
 - Session-based security and simple JSP interface
 
 ---
@@ -27,7 +28,7 @@ JAVAPROJECT/
 ├─ src/main/java/model         # Data models
 ├─ src/main/webapp             # JSP pages and web resources
 │   ├─ admin/                  # Admin pages
-│   └─ student pages/          # Student pages (note space in folder name)
+│   └─ student/                # Student pages (renamed from "student pages")
 ├─ database_schema.sql         # Creates schema and sample data
 ├─ pom.xml                     # Maven build definition
 ├─ scripts/                    # Utility scripts

@@ -1,11 +1,16 @@
 <jsp:include page="/header.jsp" />
 <%
-    model.Admin admin = (model.Admin) session.getAttribute("admin");
-    if (admin == null) {
-        response.sendRedirect("adminLogin.jsp");
+    model.Student student = (model.Student) session.getAttribute("student");
+    if (student == null) {
+        response.sendRedirect("login.jsp");
         return;
     }
     java.util.List<model.Result> results = (java.util.List<model.Result>) session.getAttribute("results");
+    if (results == null) {
+        dao.ResultDAO dao = new dao.ResultDAO();
+        results = dao.getResultsByStudentId(student.getStudentId());
+        session.setAttribute("results", results);
+    }
 
     java.util.Map<Integer, String> examNameMap = new java.util.HashMap<Integer, String>();
     java.util.List<model.Exam> allExams = new dao.ExamDAO().getAllExams();
@@ -15,15 +20,15 @@
 %>
 <div class="page-header">
     <div>
-        <h2 class="mb-1">All Results</h2>
-        <p class="page-subtitle">Monitor outcomes, suspicious activity, and completion health.</p>
+        <h2 class="mb-1">My Results</h2>
+        <p class="page-subtitle">Review your performance and status across attempts.</p>
     </div>
     <div class="page-actions">
-        <a href="adminDashboard.jsp" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="studentDashboard.jsp" class="btn btn-secondary">Back to Dashboard</a>
     </div>
 </div>
 <% if (results == null || results.isEmpty()) { %>
-    <div class="empty-state">No results found yet.</div>
+    <div class="empty-state">No results to display yet.</div>
 <% } else { %>
     <%
         int totalAttempts = results.size();
@@ -41,8 +46,8 @@
     %>
     <div class="row g-2 mb-3">
         <div class="col-md-3"><div class="summary-card neutral"><div class="label">Attempts</div><div class="value"><%= totalAttempts %></div></div></div>
-        <div class="col-md-3"><div class="summary-card danger"><div class="label">Flagged</div><div class="value"><%= flaggedCount %></div></div></div>
-        <div class="col-md-3"><div class="summary-card warn"><div class="label">Timed Out</div><div class="value"><%= timedOutCount %></div></div></div>
+        <div class="col-md-3"><div class="summary-card warn"><div class="label">Flagged</div><div class="value"><%= flaggedCount %></div></div></div>
+        <div class="col-md-3"><div class="summary-card danger"><div class="label">Timed Out</div><div class="value"><%= timedOutCount %></div></div></div>
         <div class="col-md-3"><div class="summary-card info"><div class="label">Avg %</div><div class="value"><%= String.format("%.2f", averagePercent) %>%</div></div></div>
     </div>
 
@@ -51,11 +56,11 @@
     <table class="table table-striped align-middle mb-0">
         <thead>
             <tr>
-                <th>Result ID</th><th>Student ID</th><th>Exam</th><th>Score</th><th>Total</th><th>Percentage</th><th>Date</th><th>Status</th><th>Suspicious</th>
+                <th>Exam</th><th>Score</th><th>Total</th><th>Percentage</th><th>Date</th><th>Status</th><th>Suspicious</th>
             </tr>
         </thead>
         <tbody>
-        <% for (model.Result r : results) {
+        <% for (model.Result r : results) { 
                String rowClass = "";
                if ("Flagged".equals(r.getStatus())) { rowClass = "table-danger"; }
                else if ("Timed Out".equals(r.getStatus())) { rowClass = "table-warning"; }
@@ -65,8 +70,6 @@
                else if ("Timed Out".equals(r.getStatus())) { statusBadge = "badge bg-warning text-dark"; }
         %>
             <tr class="<%= rowClass %>">
-                <td><%= r.getResultId() %></td>
-                <td><%= r.getStudentId() %></td>
                 <td><strong><%= examNameMap.getOrDefault(r.getExamId(), "Exam #" + r.getExamId()) %></strong><br><small class="text-muted">ID: <%= r.getExamId() %></small></td>
                 <td><%= r.getScore() %></td>
                 <td><%= r.getTotalQuestions() %></td>
@@ -82,3 +85,4 @@
     </div>
 <% } %>
 <jsp:include page="/footer.jsp" />
+
