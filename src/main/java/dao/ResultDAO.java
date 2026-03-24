@@ -6,6 +6,29 @@ import model.Result;
 
 public class ResultDAO {
 
+    private boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount();
+        for (int i = 1; i <= columnCount; i++) {
+            if (columnName.equalsIgnoreCase(metaData.getColumnLabel(i))
+                    || columnName.equalsIgnoreCase(metaData.getColumnName(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasSuspiciousCountColumn(Connection con) {
+        try {
+            DatabaseMetaData metaData = con.getMetaData();
+            try (ResultSet rs = metaData.getColumns(con.getCatalog(), null, "results", "suspiciousCount")) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public List<Result> getResultsByStudentId(int studentId) {
         List<Result> results = new ArrayList<>();
 
@@ -18,7 +41,13 @@ public class ResultDAO {
                 ps.setInt(1, studentId);
 
                 try (ResultSet rs = ps.executeQuery()) {
+                    boolean hasSuspiciousColumn = false;
+                    boolean checkedColumn = false;
                     while (rs.next()) {
+                        if (!checkedColumn) {
+                            hasSuspiciousColumn = hasColumn(rs, "suspiciousCount");
+                            checkedColumn = true;
+                        }
                         Result r = new Result(
                                 rs.getInt("resultId"),
                                 rs.getInt("studentId"),
@@ -28,7 +57,11 @@ public class ResultDAO {
                                 rs.getString("resultDate"),
                                 rs.getString("status")
                         );
-                        r.setSuspiciousCount(rs.getInt("suspiciousCount"));
+                        if (hasSuspiciousColumn) {
+                            r.setSuspiciousCount(rs.getInt("suspiciousCount"));
+                        } else {
+                            r.setSuspiciousCount(0);
+                        }
                         results.add(r);
                     }
                 }
@@ -55,7 +88,13 @@ public class ResultDAO {
             try (PreparedStatement ps = con.prepareStatement(sql);
                  ResultSet rs = ps.executeQuery()) {
 
+                boolean hasSuspiciousColumn = false;
+                boolean checkedColumn = false;
                 while (rs.next()) {
+                    if (!checkedColumn) {
+                        hasSuspiciousColumn = hasColumn(rs, "suspiciousCount");
+                        checkedColumn = true;
+                    }
                     Result r = new Result(
                             rs.getInt("resultId"),
                             rs.getInt("studentId"),
@@ -65,7 +104,11 @@ public class ResultDAO {
                             rs.getString("resultDate"),
                             rs.getString("status")
                     );
-                    r.setSuspiciousCount(rs.getInt("suspiciousCount"));
+                    if (hasSuspiciousColumn) {
+                        r.setSuspiciousCount(rs.getInt("suspiciousCount"));
+                    } else {
+                        r.setSuspiciousCount(0);
+                    }
                     results.add(r);
                 }
             }
@@ -85,7 +128,14 @@ public class ResultDAO {
             Connection con = DBConnection.getConnection();
             if (con == null) return false;
 
-            String sql = "INSERT INTO results (studentId, examId, score, totalQuestions, resultDate, status, suspiciousCount) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            boolean hasSuspiciousCount = hasSuspiciousCountColumn(con);
+            String sql;
+            if (hasSuspiciousCount) {
+                sql = "INSERT INTO results (studentId, examId, score, totalQuestions, resultDate, status, suspiciousCount) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            } else {
+                sql = "INSERT INTO results (studentId, examId, score, totalQuestions, resultDate, status) VALUES (?, ?, ?, ?, ?, ?)";
+            }
+
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, result.getStudentId());
                 ps.setInt(2, result.getExamId());
@@ -93,7 +143,9 @@ public class ResultDAO {
                 ps.setInt(4, result.getTotalQuestions());
                 ps.setString(5, result.getResultDate());
                 ps.setString(6, result.getStatus());
-                ps.setInt(7, result.getSuspiciousCount());
+                if (hasSuspiciousCount) {
+                    ps.setInt(7, result.getSuspiciousCount());
+                }
 
                 int res = ps.executeUpdate();
                 con.close();
