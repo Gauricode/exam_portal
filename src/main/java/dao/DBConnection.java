@@ -12,38 +12,15 @@ public class DBConnection {
 
     private static HikariDataSource dataSource = null;
 
-    private static String getEnv(String... keys) {
-        for (String key : keys) {
-            String value = System.getenv(key);
-            if (value != null && !value.trim().isEmpty()) {
-                return value.trim();
-            }
-        }
-        return null;
-    }
-
     private static synchronized void initDataSource() {
         if (dataSource != null) return;
 
         HikariConfig config = new HikariConfig();
 
-        String url = getEnv("DB_URL");
-        if (url == null) {
-            String host = getEnv("DB_HOST");
-            if (host != null) {
-                url = "jdbc:mysql://" + host + ":3306/online_exam?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
-            } else {
-                // Default development configuration
-                url = "jdbc:mysql://localhost:3306/online_exam?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
-            }
-        }
-
-        String user = getEnv("DB_USER");
-        String pass = getEnv("DB_PASS", "DB_PASSWORD");
-
-        if (url == null || user == null || pass == null) {
-            throw new IllegalStateException("Missing database environment variables. Required: DB_URL (or DB_HOST), DB_USER, and DB_PASS (or DB_PASSWORD).");
-        }
+        // Hardcoded database configuration for Tomcat
+        String url = "jdbc:mysql://localhost:3306/online_exam?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
+        String user = "root";
+        String pass = "narangavellam";
 
         config.setJdbcUrl(url);
         config.setUsername(user);

@@ -10,7 +10,6 @@ public class StudentDAO {
         try {
             Connection con = DBConnection.getConnection();
             if (con == null) {
-                System.out.println("Database connection failed");
                 return null;
             }
 
@@ -42,15 +41,10 @@ public class StudentDAO {
 
     public boolean registerStudent(String name, String email, String password) {
         try {
-            System.out.println("Attempting to register student: " + email);
-            
             Connection con = DBConnection.getConnection();
             if (con == null) {
-                System.out.println("Database connection failed");
                 return false;
             }
-            
-            System.out.println("Database connection successful");
 
             String sql = "INSERT INTO students (name, email, password) VALUES (?, ?, ?)";
             try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -58,16 +52,12 @@ public class StudentDAO {
                 ps.setString(2, email);
                 ps.setString(3, password);
 
-                System.out.println("Executing SQL: " + sql);
                 int result = ps.executeUpdate();
-                System.out.println("Rows affected: " + result);
-                
                 con.close();
                 return result > 0;
             }
 
         } catch (Exception e) {
-            System.out.println("Error in registration: " + e.getMessage());
             e.printStackTrace();
         }
 
