@@ -32,11 +32,18 @@ public class DBConnection {
             String host = getEnv("DB_HOST");
             if (host != null) {
                 url = "jdbc:mysql://" + host + ":3306/online_exam?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
+            } else {
+                // Default development configuration
+                url = "jdbc:mysql://localhost:3306/online_exam?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
             }
         }
 
         String user = getEnv("DB_USER");
         String pass = getEnv("DB_PASS", "DB_PASSWORD");
+        
+        // Default development credentials
+        if (user == null) user = "root";
+        if (pass == null) pass = "narangavellam";
 
         if (url == null || user == null || pass == null) {
             throw new IllegalStateException("Missing database environment variables. Required: DB_URL (or DB_HOST), DB_USER, and DB_PASS (or DB_PASSWORD).");

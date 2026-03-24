@@ -18,13 +18,18 @@ public class RegisterServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
+        System.out.println("Registration attempt - Name: " + name + ", Email: " + email);
+        
         StudentDAO dao = new StudentDAO();
         boolean success = dao.registerStudent(name, email, password);
 
+        System.out.println("Registration result: " + success);
+
         if (success) {
-            res.sendRedirect("student/login.jsp");
+            res.sendRedirect(req.getContextPath() + "/student/login.jsp");
         } else {
-            res.getWriter().println("Registration failed. Please try again.");
+            res.getWriter().println("Registration failed. Please try again.<br>");
+            res.getWriter().println("Debug: Check database connection and table structure.");
         }
     }
 }

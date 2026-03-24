@@ -26,8 +26,7 @@ public class LoginServlet extends HttpServlet {
         if (s != null) {
             HttpSession session = req.getSession();
             session.setAttribute("student", s);
-            // folder name contains a space
-            res.sendRedirect("student/studentDashboard.jsp");
+            res.sendRedirect(req.getContextPath() + "/student/studentDashboard.jsp");
         } else {
             res.getWriter().println("Invalid Email or Password");
         }
