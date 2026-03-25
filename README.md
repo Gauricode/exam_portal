@@ -7,7 +7,7 @@ MySQL database and accessed via DAOs using HikariCP connection pooling.
 
 ---
 
-## 🚀 Features
+## Features
 
 - Student registration and login
 - Admin authentication and dashboard
@@ -37,7 +37,7 @@ JAVAPROJECT/
 
 ---
 
-## 🛠 Prerequisites
+##  Prerequisites
 
 Before running the application locally, ensure you have:
 
@@ -50,7 +50,7 @@ Before running the application locally, ensure you have:
 
 ---
 
-## ⚙️ Installation & Setup
+##  Installation & Setup
 
 1. **Clone the repository**:
    ```bash
@@ -86,7 +86,7 @@ Before running the application locally, ensure you have:
 
 ---
 
-## 👤 Default Credentials
+##  Default Credentials
 
 | Role   | Email               | Password    |
 |--------|---------------------|-------------|
@@ -105,35 +105,14 @@ Before running the application locally, ensure you have:
 
 ---
 
-## 🧪 Running Tests
-
-There are currently no automated tests. You can manually verify functionality by
-logging in as a student/admin and navigating through the UI.
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-change`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
-4. Push to the branch (`git push origin feature/my-change`)
-5. Open a Pull Request
-
-Please follow standard Java coding conventions and ensure the project builds
-successfully with `mvn clean package` before submitting changes.
-
----
-
-## 📄 License
+##  License
 
 This project is released under the MIT License. See `LICENSE` for details.
 
 ---
 
-### 📌 Additional Resources
+###  Additional Resources
 Refer to `README_SETUP.md` for a step-by-step walkthrough with sample commands
 and environment setup tips.
 
-Happy coding! 🎓
 
