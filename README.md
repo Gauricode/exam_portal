@@ -19,7 +19,7 @@ MySQL database and accessed via DAOs using HikariCP connection pooling.
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```
 JAVAPROJECT/
@@ -105,14 +105,5 @@ Before running the application locally, ensure you have:
 
 ---
 
-##  License
-
-This project is released under the MIT License. See `LICENSE` for details.
-
----
-
-###  Additional Resources
-Refer to `README_SETUP.md` for a step-by-step walkthrough with sample commands
-and environment setup tips.
 
 
